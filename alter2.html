@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HFG CAPITAL</title>
+  <meta name="description" content="HFG CAPITAL" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: auto;
+      scrollbar-width: none;
+      font-family: "Georgia", serif;
+      background-color: white;
+    }
+
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: white;
+      border-bottom: 1px solid #000;
+      height: 70px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .language-selector {
+      position: relative;
+    }
+
+    .selected-flag {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .selected-flag img {
+      width: 24px;
+      height: 16px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .language-list {
+      position: absolute;
+      top: 30px;
+      left: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      z-index: 20;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .language-list.show {
+      display: flex;
+    }
+
+    .language-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .language-option:hover {
+      background-color: #f0f0f0;
+    }
+
+    .language-option img {
+      width: 20px;
+      height: 14px;
+      border-radius: 3px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-5px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .login-form {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .login-form input {
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: "Tahoma", sans-serif;
+      font-size: 12px;
+    }
+
+    .login-form input::placeholder {
+      color: #888;
+      font-style: italic;
+    }
+
+    .login-form button {
+      padding: 8px 12px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-family: "Georgia", serif;
+      font-size: 14px;
+      cursor: pointer;
+      min-width: 120px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .login-form button:hover {
+      background-color: #222;
+    }
+
+    .main-image-container {
+      position: relative;
+      height: 200vh;
+      overflow: hidden;
+    }
+
+    .main-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      transform: translateY(0);
+      transition: transform 0.1s ease-out;
+      z-index: 1;
+    }
+
+    .centered-logo {
+      position: fixed;
+      top: calc(50% + 35px);
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      height: 160px;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 2s ease-in;
+      pointer-events: none;
+    }
+
+    .centered-logo.visible {
+      opacity: 1;
+    }
+
+    .error-message {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #b30000;
+      font-size: 12px;
+      display: none;
+      font-family: "Georgia", serif;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 8px 12px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      z-index: 15;
+    }
+
+    /* Responsive Mobile */
+    @media (max-width: 600px), (max-height: 500px) {
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+        height: auto;
+      }
+
+      .login-form {
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .login-form input,
+      .login-form button {
+        width: 140px;
+        text-align: center;
+      }
+
+      .login-form input {
+        font-size: 10px;
+      }
+
+      .centered-logo {
+        height: 80px;
+        max-width: 70%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="language-selector" id="languageSelector">
+        <div class="selected-flag" onclick="toggleLanguageList()">
+          <img id="currentFlag" src="https://flagcdn.com/fr.svg" alt="Current Language">
+          <span>▼</span>
+        </div>
+        <div class="language-list" id="languageList">
+          <!-- Les options seront ajoutées en JS -->
+        </div>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <input type="text" id="userId" maxlength="6" pattern="\d{6}" placeholder="Identifiant (6 chiffres)" required />
+        <input type="password" id="password" maxlength="12" placeholder="Mot de passe" required />
+        <button type="submit" id="loginButton">Se connecter</button>
+      </form>
+    </div>
+
+    <div class="main-image-container">
+      <img src="ChatGPTImage13.png" alt="Background" class="main-image" id="parallaxImage" />
+    </div>
+
+    <img src="logo.jpeg" alt="Logo Centré" class="centered-logo" id="centeredLogo" />
+  </div>
+
+  <div class="error-message" id="errorMsg">
+    La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire.
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+    const loginButton = document.getElementById("loginButton");
+    const userIdInput = document.getElementById("userId");
+    const passwordInput = document.getElementById("password");
+    const currentFlag = document.getElementById("currentFlag");
+    const languageList = document.getElementById("languageList");
+
+    const languages = {
+      fr: { flag: "https://flagcdn.com/fr.svg", label: "Français", placeholders: ["Identifiant (6 chiffres)", "Mot de passe"], login: "Se connecter", error: "La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire." },
+      en: { flag: "A_digital_vector_graphic_of_a_flag_is_diagonally_s.png", label: "English", placeholders: ["ID (6 digits)", "Password"], login: "Log in", error: "The credentials provided did not permit identification. Please contact your manager." },
+      cn: { flag: "https://flagcdn.com/cn.svg", label: "中文", placeholders: ["识别码 (6位数字)", "密码"], login: "登录", error: "所输入的信息未能完成验证。请联系您的客户经理。" },
+      es: { flag: "https://flagcdn.com/es.svg", label: "Español", placeholders: ["ID (6 dígitos)", "Contraseña"], login: "Iniciar sesión", error: "La combinación ingresada no permitió su identificación. Por favor contacte a su gestor." },
+      de: { flag: "https://flagcdn.com/de.svg", label: "Deutsch", placeholders: ["ID (6 Ziffern)", "Passwort"], login: "Anmelden", error: "Die eingegebenen Daten konnten nicht verifiziert werden. Bitte kontaktieren Sie Ihren Berater." },
+      it: { flag: "https://flagcdn.com/it.svg", label: "Italiano", placeholders: ["ID (6 cifre)", "Password"], login: "Accedi", error: "La combinazione inserita non ha permesso l’identificazione. Si prega di contattare il proprio gestore." },
+      ru: { flag: "https://flagcdn.com/ru.svg", label: "Русский", placeholders: ["ID (6 цифр)", "Пароль"], login: "Войти", error: "Введенные данные не позволили выполнить идентификацию. Пожалуйста, свяжитесь с вашим менеджером." },
+      jp: { flag: "https://flagcdn.com/jp.svg", label: "日本語", placeholders: ["ID (6桁)", "パスワード"], login: "ログイン", error: "入力された情報では認証できませんでした。担当者にご連絡ください。" },
+      vn: { flag: "https://flagcdn.com/vn.svg", label: "Tiếng Việt", placeholders: ["ID (6 chữ số)", "Mật khẩu"], login: "Đăng nhập", error: "Thông tin đã nhập không cho phép xác thực. Vui lòng liên hệ với người quản lý của bạn." }
+    };
+
+    function toggleLanguageList() {
+      languageList.classList.toggle('show');
+    }
+
+    function changeLanguage(lang) {
+      currentFlag.src = languages[lang].flag;
+      userIdInput.placeholder = languages[lang].placeholders[0];
+      passwordInput.placeholder = languages[lang].placeholders[1];
+      loginButton.textContent = languages[lang].login;
+      errorMsg.textContent = languages[lang].error;
+      languageList.classList.remove('show');
+    }
+
+    // Create language options
+    for (const code in languages) {
+      const option = document.createElement('div');
+      option.className = 'language-option';
+      option.innerHTML = `<img src="${languages[code].flag}" alt="${languages[code].label}"><span>${languages[code].label}</span>`;
+      option.onclick = () => changeLanguage(code);
+      languageList.appendChild(option);
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const userId = userIdInput.value;
+      const password = passwordInput.value;
+      const idValid = /^\d{6}$/.test(userId);
+      const pwdValid = password.length <= 12 && password.length > 0;
+
+      if (!idValid) {
+        alert("L'identifiant doit contenir exactement 6 chiffres.");
+        return;
+      }
+      if (!pwdValid) {
+        alert("Le mot de passe doit contenir jusqu'à 12 caractères maximum.");
+        return;
+      }
+      errorMsg.style.display = "block";
+    });
+
+    window.addEventListener('scroll', function() {
+      const scrolled = window.scrollY;
+      const parallax = document.getElementById('parallaxImage');
+      parallax.style.transform = 'translateY(' + scrolled * 0.4 + 'px)';
+    });
+
+    window.addEventListener('load', function() {
+      const logo = document.getElementById('centeredLogo');
+      logo.classList.add('visible');
+      changeLanguage('fr');
+    });
+  </script>
+</body>
+</html>
