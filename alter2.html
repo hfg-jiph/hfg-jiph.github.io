@@ -193,8 +193,8 @@
       z-index: 15;
     }
 
-    /* Responsive Mobile */
-    @media (max-width: 600px) {
+    /* Responsive Portrait Mobile */
+    @media (max-width: 600px) and (orientation: portrait) {
       .header {
         flex-direction: column;
         align-items: stretch;
@@ -202,7 +202,36 @@
       }
 
       .login-form {
-        flex-direction: row; /* ✅ aligné horizontalement en mobile paysage */
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .login-form input,
+      .login-form button {
+        width: 140px;
+        text-align: center;
+      }
+
+      .login-form input {
+        font-size: 10px;
+      }
+
+      .centered-logo {
+        height: 80px;
+        max-width: 70%;
+      }
+    }
+
+    /* Responsive Landscape Mobile */
+    @media (max-width: 600px) and (orientation: landscape) {
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+        height: auto;
+      }
+
+      .login-form {
+        flex-direction: row;
         justify-content: center;
         gap: 10px;
         flex-wrap: wrap;
@@ -227,124 +256,4 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="language-selector" id="languageSelector">
-        <div class="selected-flag" onclick="toggleLanguageList()">
-          <img id="currentFlag" src="https://flagcdn.com/fr.svg" alt="Français">
-          <span>▼</span>
-        </div>
-        <div class="language-list" id="languageList">
-          <!-- Options ajoutées en JS -->
-        </div>
-      </div>
-
-      <form id="loginForm" class="login-form">
-        <input type="text" id="userId" maxlength="6" pattern="\d{6}" placeholder="Identifiant (6 chiffres)" required />
-        <input type="password" id="password" maxlength="12" placeholder="Mot de passe" required />
-        <button type="submit" id="loginButton">Se connecter</button>
-      </form>
-    </div>
-
-    <div class="main-image-container">
-      <img src="ChatGPTImage13.png" alt="Background" class="main-image" id="parallaxImage" />
-    </div>
-
-    <img src="logo.jpeg" alt="Logo Centré" class="centered-logo" id="centeredLogo" />
-  </div>
-
-  <div class="error-message" id="errorMsg">
-    La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire.
-  </div>
-
-  <script>
-    const form = document.getElementById("loginForm");
-    const errorMsg = document.getElementById("errorMsg");
-    const loginButton = document.getElementById("loginButton");
-    const userIdInput = document.getElementById("userId");
-    const passwordInput = document.getElementById("password");
-    const currentFlag = document.getElementById("currentFlag");
-    const languageList = document.getElementById("languageList");
-
-    const languages = {
-      fr: { flag: "https://flagcdn.com/fr.svg", label: "Français", placeholders: ["Identifiant (6 chiffres)", "Mot de passe"], login: "Se connecter", error: "La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire." },
-      en: { flag: "UKUS_flag.png", label: "English", placeholders: ["ID (6 digits)", "Password"], login: "Log in", error: "The credentials provided did not permit identification. Please contact your manager." },
-      cn: { flag: "https://flagcdn.com/cn.svg", label: "中文", placeholders: ["识别码 (6位数字)", "密码"], login: "登录", error: "所输入的信息未能完成验证。请联系您的客户经理。" },
-      es: { flag: "https://flagcdn.com/es.svg", label: "Español", placeholders: ["ID (6 dígitos)", "Contraseña"], login: "Iniciar sesión", error: "La combinación ingresada no permitió su identificación. Por favor contacte a su gestor." },
-      de: { flag: "https://flagcdn.com/de.svg", label: "Deutsch", placeholders: ["ID (6 Ziffern)", "Passwort"], login: "Anmelden", error: "Die eingegebenen Daten konnten nicht verifiziert werden. Bitte kontaktieren Sie Ihren Berater." },
-      it: { flag: "https://flagcdn.com/it.svg", label: "Italiano", placeholders: ["ID (6 cifre)", "Password"], login: "Accedi", error: "La combinazione inserita non ha permesso l’identificazione. Si prega di contattare il proprio gestore." },
-      ru: { flag: "https://flagcdn.com/ru.svg", label: "Русский", placeholders: ["ID (6 цифр)", "Пароль"], login: "Войти", error: "Введенные данные не позволили выполнить идентификацию. Пожалуйста, свяжитесь с вашим менеджером." },
-      jp: { flag: "https://flagcdn.com/jp.svg", label: "日本語", placeholders: ["ID (6桁)", "パスワード"], login: "ログイン", error: "入力された情報では認証できませんでした。担当者にご連絡ください。" },
-      vn: { flag: "https://flagcdn.com/vn.svg", label: "Tiếng Việt", placeholders: ["ID (6 chữ số)", "Mật khẩu"], login: "Đăng nhập", error: "Thông tin đã nhập không cho phép xác thực. Vui lòng liên hệ với người quản lý của bạn." }
-    };
-
-    function toggleLanguageList() {
-      languageList.classList.toggle('show');
-    }
-
-    function changeLanguage(lang) {
-      currentFlag.src = languages[lang].flag;
-      currentFlag.alt = languages[lang].label;
-      userIdInput.placeholder = languages[lang].placeholders[0];
-      passwordInput.placeholder = languages[lang].placeholders[1];
-      loginButton.textContent = languages[lang].login;
-      errorMsg.textContent = languages[lang].error;
-
-      // Reset all flags
-      const allFlags = document.querySelectorAll('.language-option img');
-      allFlags.forEach(img => img.classList.remove('active-flag'));
-      const selected = document.querySelector(`img[alt="${languages[lang].label}"]`);
-      if (selected) selected.classList.add('active-flag');
-
-      languageList.classList.remove('show');
-    }
-
-    function closeLanguageListOnClickOutside(event) {
-      if (!event.target.closest('#languageSelector')) {
-        languageList.classList.remove('show');
-      }
-    }
-
-    // Création des drapeaux
-    for (const code in languages) {
-      const option = document.createElement('div');
-      option.className = 'language-option';
-      option.innerHTML = `<img src="${languages[code].flag}" title="${languages[code].label}" alt="${languages[code].label}">`;
-      option.onclick = () => changeLanguage(code);
-      languageList.appendChild(option);
-    }
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const userId = userIdInput.value;
-      const password = passwordInput.value;
-      const idValid = /^\d{6}$/.test(userId);
-      const pwdValid = password.length <= 12 && password.length > 0;
-
-      if (!idValid) {
-        alert("L'identifiant doit contenir exactement 6 chiffres.");
-        return;
-      }
-      if (!pwdValid) {
-        alert("Le mot de passe doit contenir jusqu'à 12 caractères maximum.");
-        return;
-      }
-      errorMsg.style.display = "block";
-    });
-
-    window.addEventListener('scroll', function() {
-      const scrolled = window.scrollY;
-      const parallax = document.getElementById('parallaxImage');
-      parallax.style.transform = 'translateY(' + scrolled * 0.4 + 'px)';
-    });
-
-    window.addEventListener('load', function() {
-      const logo = document.getElementById('centeredLogo');
-      logo.classList.add('visible');
-      changeLanguage('fr');
-    });
-
-    document.addEventListener('click', closeLanguageListOnClickOutside);
-  </script>
-</body>
-</html>
+  <!-- ... ton body, scripts, etc. (inchangés) ... -->
