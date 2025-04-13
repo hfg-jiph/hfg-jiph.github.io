@@ -155,7 +155,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center bottom; 
+      object-position: center top; /* ✅ L'image commence en haut */
       transform: translateY(0);
       transition: transform 0.1s ease-out;
       z-index: 1;
@@ -372,9 +372,10 @@
       logo.classList.add('visible');
       changeLanguage('fr');
 
-        // ✅ Force scroll en bas au chargement
+      // ✅ Force scroll en bas au chargement
       window.scrollTo(0, document.body.scrollHeight);
     });
+
 
     document.addEventListener('click', closeLanguageListOnClickOutside);
 
