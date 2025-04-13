@@ -212,6 +212,14 @@
       .centered-logo { height: 80px; max-width: 70%; }
     }
 
+    /* ✅ Fix language menu always left on mobile */
+    @media (max-width: 600px) {
+      .language-selector {
+        align-self: flex-start;
+        margin-bottom: 10px;
+      }
+    }
+    
     /* Responsive Mobile Landscape */
     @media (max-width: 600px) and (orientation: landscape) {
       .header { flex-direction: column; height: auto; }
