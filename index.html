@@ -79,7 +79,7 @@
       font-family: "Georgia", serif;
       font-size: 14px;
       cursor: pointer;
-      min-width: 120px; /* Fixe la largeur minimale du bouton */
+      min-width: 120px;
       text-align: center;
       white-space: nowrap;
     }
@@ -107,6 +107,33 @@
       height: 1px;
       background-color: black;
       z-index: 1;
+    }
+
+    /* 🧠 Responsive mode pour écran étroit */
+    @media (max-width: 600px) {
+      .login-container {
+        top: 60px;
+        right: 20px;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .login-form {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+      }
+
+      .error-message {
+        top: 200px;
+        right: 20px;
+        width: 90%;
+        max-width: 300px;
+      }
+
+      .divider {
+        top: 260px;
+      }
     }
   </style>
 </head>
@@ -178,7 +205,7 @@
       loginButton.textContent = messages[lang].login;
       userIdInput.placeholder = messages[lang].placeholder;
       errorMsg.textContent = messages[lang].error;
-      errorMsg.style.display = "none"; // Cacher l'erreur quand on change de langue
+      errorMsg.style.display = "none"; // Masquer l'erreur au changement de langue
     }
 
     form.addEventListener("submit", function (e) {
@@ -200,7 +227,6 @@
         return;
       }
 
-      // Toujours montrer l'erreur
       errorMsg.style.display = "block";
     });
   </script>
