@@ -6,13 +6,19 @@
   <meta name="description" content="HFG CAPITAL" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body {
+    html, body {
       margin: 0;
-      background-color: white;
+      padding: 0;
+      height: 100%;
+      overflow: hidden; /* ❗ Empêche le scroll */
       font-family: "Georgia", serif;
-      height: 100vh;
+      background-color: white;
+    }
+
+    .container {
       display: flex;
       flex-direction: column;
+      height: 100%;
     }
 
     .header {
@@ -24,6 +30,7 @@
       border-bottom: 1px solid #000;
       height: 70px;
       flex-shrink: 0;
+      z-index: 10;
     }
 
     .flags {
@@ -87,19 +94,26 @@
       background-color: #222;
     }
 
-    .error-message {
-      margin-top: 20px;
-      color: #b30000;
-      font-size: 12px;
-      display: none;
-      text-align: center;
-      font-family: "Georgia", serif;
-    }
-
     .main-image {
       flex-grow: 1;
       width: 100%;
-      object-fit: cover; /* ❗ Remplit tout l'espace sans déformation */
+      object-fit: cover; /* ❗ Très important : remplit sans déformer */
+      object-position: center center; /* ❗ Centre l'image */
+    }
+
+    .error-message {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #b30000;
+      font-size: 12px;
+      display: none;
+      font-family: "Georgia", serif;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 8px 12px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
     /* Responsive pour mobile */
@@ -123,38 +137,40 @@
 </head>
 
 <body>
-  <div class="header">
-    <div class="flags">
-      <img src="https://flagcdn.com/fr.svg" class="flag" onclick="changeLanguage('fr')" title="Français" />
-      <img src="https://flagcdn.com/gb.svg" class="flag" onclick="changeLanguage('en')" title="English" />
-      <img src="https://flagcdn.com/cn.svg" class="flag" onclick="changeLanguage('cn')" title="中文" />
+  <div class="container">
+    <div class="header">
+      <div class="flags">
+        <img src="https://flagcdn.com/fr.svg" class="flag" onclick="changeLanguage('fr')" title="Français" />
+        <img src="https://flagcdn.com/gb.svg" class="flag" onclick="changeLanguage('en')" title="English" />
+        <img src="https://flagcdn.com/cn.svg" class="flag" onclick="changeLanguage('cn')" title="中文" />
+      </div>
+
+      <div class="logo-container">
+        <img src="logo.jpeg" alt="Logo" class="logo" />
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <input
+          type="text"
+          id="userId"
+          maxlength="6"
+          pattern="\d{6}"
+          placeholder="Identifiant (6 chiffres)"
+          required
+        />
+        <input
+          type="password"
+          id="password"
+          maxlength="12"
+          placeholder="Mot de passe"
+          required
+        />
+        <button type="submit" id="loginButton">Se connecter</button>
+      </form>
     </div>
 
-    <div class="logo-container">
-      <img src="logo.jpeg" alt="Logo" class="logo" />
-    </div>
-
-    <form id="loginForm" class="login-form">
-      <input
-        type="text"
-        id="userId"
-        maxlength="6"
-        pattern="\d{6}"
-        placeholder="Identifiant (6 chiffres)"
-        required
-      />
-      <input
-        type="password"
-        id="password"
-        maxlength="12"
-        placeholder="Mot de passe"
-        required
-      />
-      <button type="submit" id="loginButton">Se connecter</button>
-    </form>
+    <img src="ChatGPTImage13.png" alt="Background" class="main-image" />
   </div>
-
-  <img src="ChatGPTImage13.png" alt="Background" class="main-image" />
 
   <div class="error-message" id="errorMsg">
     La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire.
