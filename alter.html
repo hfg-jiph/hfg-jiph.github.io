@@ -64,7 +64,7 @@
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      font-family: "Georgia", serif;
+      font-family: "Tahoma", sans-serif; /* ✅ Police modifiée ici */
       font-size: 14px;
     }
 
@@ -103,11 +103,12 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain; /* ✅ Plus "cover" → maintenant "contain" */
       object-position: center;
       transform: translateY(0);
       transition: transform 0.1s ease-out;
       z-index: 1;
+      background-color: black; /* optionnel : couleur de fond si besoin autour de l'image */
     }
 
     .centered-logo {
@@ -116,11 +117,11 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 5;
-      height: 160px; /* Grand logo sur PC */
+      height: 160px;
       object-fit: contain;
       opacity: 0;
-      transition: opacity 2s ease-in; /* Fade-in doux */
-      pointer-events: none; /* Le logo ne bloque pas les clics */
+      transition: opacity 2s ease-in;
+      pointer-events: none;
     }
 
     .centered-logo.visible {
@@ -157,7 +158,7 @@
       }
 
       .centered-logo {
-        height: 60px; /* Plus petit logo sur mobile */
+        height: 60px;
       }
     }
   </style>
