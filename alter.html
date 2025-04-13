@@ -10,6 +10,9 @@
       margin: 0;
       background-color: white;
       font-family: "Georgia", serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .header {
@@ -19,11 +22,8 @@
       padding: 10px 20px;
       background-color: white;
       border-bottom: 1px solid #000;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 10;
+      height: 70px;
+      flex-shrink: 0;
     }
 
     .flags {
@@ -88,7 +88,7 @@
     }
 
     .error-message {
-      margin-top: 100px;
+      margin-top: 20px;
       color: #b30000;
       font-size: 12px;
       display: none;
@@ -96,16 +96,18 @@
       font-family: "Georgia", serif;
     }
 
-    /* Espace pour éviter que le contenu ne passe sous le bandeau */
-    .spacer {
-      height: 70px;
+    .main-image {
+      flex-grow: 1;
+      width: 100%;
+      object-fit: cover; /* ❗ Remplit tout l'espace sans déformation */
     }
 
-    /* Responsive Mobile */
+    /* Responsive pour mobile */
     @media (max-width: 600px) {
       .header {
         flex-direction: column;
         align-items: stretch;
+        height: auto;
       }
 
       .logo-container {
@@ -152,7 +154,7 @@
     </form>
   </div>
 
-  <div class="spacer"></div> <!-- Pour pousser le contenu sous le header -->
+  <img src="ChatGPTImage13.png" alt="Background" class="main-image" />
 
   <div class="error-message" id="errorMsg">
     La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire.
