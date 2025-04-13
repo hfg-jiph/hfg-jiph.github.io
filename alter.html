@@ -10,14 +10,14 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: auto; /* ❗ Scroll autorisé */
-      scrollbar-width: none; /* ❗ Pour Firefox */
+      overflow: auto;
+      scrollbar-width: none; /* Firefox */
       font-family: "Georgia", serif;
       background-color: white;
     }
 
     body::-webkit-scrollbar {
-      display: none; /* ❗ Cache la barre sur Chrome/Safari/Edge */
+      display: none; /* Chrome/Safari/Edge */
     }
 
     .container {
@@ -103,18 +103,21 @@
     }
 
     .main-image-container {
-      height: 200vh; /* ❗ Image plus grande que l'écran pour permettre de scroller */
       position: relative;
+      height: 200vh; /* Plus grand que l'écran pour pouvoir scroller */
       overflow: hidden;
     }
 
     .main-image {
-      position: sticky;
-      top: 70px; /* ❗ Collé sous le bandeau */
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: calc(100vh - 70px);
+      height: 100%;
       object-fit: cover;
       object-position: center;
+      transform: translateY(0);
+      transition: transform 0.1s ease-out;
     }
 
     .error-message {
@@ -133,7 +136,7 @@
       z-index: 15;
     }
 
-    /* Responsive pour mobile */
+    /* Responsive Mobile */
     @media (max-width: 600px) {
       .header {
         flex-direction: column;
@@ -187,7 +190,7 @@
     </div>
 
     <div class="main-image-container">
-      <img src="ChatGPTImage13.png" alt="Background" class="main-image" />
+      <img src="ChatGPTImage13.png" alt="Background" class="main-image" id="parallaxImage" />
     </div>
   </div>
 
@@ -196,6 +199,7 @@
   </div>
 
   <script>
+    // --- Gestion du changement de langue ---
     const form = document.getElementById("loginForm");
     const errorMsg = document.getElementById("errorMsg");
     const loginButton = document.getElementById("loginButton");
@@ -254,6 +258,13 @@
       }
 
       errorMsg.style.display = "block";
+    });
+
+    // --- Effet Parallax ---
+    window.addEventListener('scroll', function() {
+      const scrolled = window.scrollY;
+      const parallax = document.getElementById('parallaxImage');
+      parallax.style.transform = 'translateY(' + scrolled * 0.4 + 'px)';
     });
   </script>
 </body>
