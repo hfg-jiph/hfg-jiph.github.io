@@ -115,18 +115,19 @@
       z-index: 1;
     }
 
-    .centered-logo {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 5;
-      height: 160px;
-      object-fit: contain;
-      opacity: 0;
-      transition: opacity 2s ease-in;
-      pointer-events: none;
-    }
+.centered-logo {
+  position: fixed;
+  top: calc(50% + 35px); /* 70px de bandeau / 2 */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  height: 160px;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 2s ease-in;
+  pointer-events: none;
+}
+
 
     .centered-logo.visible {
       opacity: 1;
