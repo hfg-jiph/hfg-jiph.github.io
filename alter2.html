@@ -87,10 +87,16 @@
       height: 16px;
       border-radius: 4px;
       display: block;
+      filter: grayscale(80%);
+      transition: filter 0.3s;
     }
 
-    .language-option:hover {
-      background-color: #f0f0f0;
+    .language-option img:hover {
+      filter: grayscale(0%);
+    }
+
+    .language-option img.active-flag {
+      filter: grayscale(0%);
     }
 
     @keyframes fadeIn {
@@ -188,7 +194,7 @@
     }
 
     /* Responsive Mobile */
-    @media (max-width: 600px), (max-height: 500px) {
+    @media (max-width: 600px) {
       .header {
         flex-direction: column;
         align-items: stretch;
@@ -196,8 +202,10 @@
       }
 
       .login-form {
-        flex-direction: column;
-        align-items: flex-end;
+        flex-direction: row; /* ✅ aligné horizontalement en mobile paysage */
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
       }
 
       .login-form input,
@@ -227,7 +235,7 @@
           <span>▼</span>
         </div>
         <div class="language-list" id="languageList">
-          <!-- Les options seront ajoutées en JS -->
+          <!-- Options ajoutées en JS -->
         </div>
       </div>
 
@@ -281,6 +289,13 @@
       passwordInput.placeholder = languages[lang].placeholders[1];
       loginButton.textContent = languages[lang].login;
       errorMsg.textContent = languages[lang].error;
+
+      // Reset all flags
+      const allFlags = document.querySelectorAll('.language-option img');
+      allFlags.forEach(img => img.classList.remove('active-flag'));
+      const selected = document.querySelector(`img[alt="${languages[lang].label}"]`);
+      if (selected) selected.classList.add('active-flag');
+
       languageList.classList.remove('show');
     }
 
@@ -290,7 +305,7 @@
       }
     }
 
-    // Créer la liste de langues
+    // Création des drapeaux
     for (const code in languages) {
       const option = document.createElement('div');
       option.className = 'language-option';
