@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HFG CAPITAL</title>
+  <meta name="description" content="HFG CAPITAL" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      background-color: white;
+      font-family: "Georgia", serif;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: white;
+      border-bottom: 1px solid #000;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    .flags {
+      display: flex;
+      gap: 8px;
+    }
+
+    .flag {
+      width: 24px;
+      height: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo-container {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .login-form {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .login-form input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: "Georgia", serif;
+      font-size: 14px;
+    }
+
+    .login-form input::placeholder {
+      color: #888;
+      font-style: italic;
+    }
+
+    .login-form button {
+      padding: 8px 12px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-family: "Georgia", serif;
+      font-size: 14px;
+      cursor: pointer;
+      min-width: 120px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .login-form button:hover {
+      background-color: #222;
+    }
+
+    .error-message {
+      margin-top: 100px;
+      color: #b30000;
+      font-size: 12px;
+      display: none;
+      text-align: center;
+      font-family: "Georgia", serif;
+    }
+
+    /* Espace pour éviter que le contenu ne passe sous le bandeau */
+    .spacer {
+      height: 70px;
+    }
+
+    /* Responsive Mobile */
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .logo-container {
+        margin: 10px 0;
+      }
+
+      .login-form {
+        flex-direction: column;
+        align-items: flex-end;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="flags">
+      <img src="https://flagcdn.com/fr.svg" class="flag" onclick="changeLanguage('fr')" title="Français" />
+      <img src="https://flagcdn.com/gb.svg" class="flag" onclick="changeLanguage('en')" title="English" />
+      <img src="https://flagcdn.com/cn.svg" class="flag" onclick="changeLanguage('cn')" title="中文" />
+    </div>
+
+    <div class="logo-container">
+      <img src="logo.jpeg" alt="Logo" class="logo" />
+    </div>
+
+    <form id="loginForm" class="login-form">
+      <input
+        type="text"
+        id="userId"
+        maxlength="6"
+        pattern="\d{6}"
+        placeholder="Identifiant (6 chiffres)"
+        required
+      />
+      <input
+        type="password"
+        id="password"
+        maxlength="12"
+        placeholder="Mot de passe"
+        required
+      />
+      <button type="submit" id="loginButton">Se connecter</button>
+    </form>
+  </div>
+
+  <div class="spacer"></div> <!-- Pour pousser le contenu sous le header -->
+
+  <div class="error-message" id="errorMsg">
+    La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire.
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+    const loginButton = document.getElementById("loginButton");
+    const userIdInput = document.getElementById("userId");
+    const passwordInput = document.getElementById("password");
+
+    const messages = {
+      fr: {
+        login: "Se connecter",
+        placeholderUser: "Identifiant (6 chiffres)",
+        placeholderPassword: "Mot de passe",
+        error: "La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire."
+      },
+      en: {
+        login: "Log in",
+        placeholderUser: "ID (6 digits)",
+        placeholderPassword: "Password",
+        error: "The credentials provided did not permit identification. Please contact your manager."
+      },
+      cn: {
+        login: "登录",
+        placeholderUser: "识别码 (6位数字)",
+        placeholderPassword: "密码",
+        error: "所输入的信息未能完成验证。请联系您的客户经理。"
+      }
+    };
+
+    let currentLanguage = "fr";
+
+    function changeLanguage(lang) {
+      currentLanguage = lang;
+      loginButton.textContent = messages[lang].login;
+      userIdInput.placeholder = messages[lang].placeholderUser;
+      passwordInput.placeholder = messages[lang].placeholderPassword;
+      errorMsg.textContent = messages[lang].error;
+      errorMsg.style.display = "none"; // Cacher l'erreur au changement de langue
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const userId = document.getElementById("userId").value;
+      const password = document.getElementById("password").value;
+
+      const idValid = /^\d{6}$/.test(userId);
+      const pwdValid = password.length <= 12 && password.length > 0;
+
+      if (!idValid) {
+        alert("L'identifiant doit contenir exactement 6 chiffres.");
+        return;
+      }
+
+      if (!pwdValid) {
+        alert("Le mot de passe doit contenir jusqu'à 12 caractères maximum.");
+        return;
+      }
+
+      errorMsg.style.display = "block";
+    });
+  </script>
+</body>
+</html>
