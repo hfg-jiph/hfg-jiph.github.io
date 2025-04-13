@@ -149,31 +149,37 @@
     }
 
     /* Responsive Mobile */
-    @media (max-width: 600px) {
-      .header {
-        flex-direction: column;
-        align-items: stretch;
-        height: auto;
-      }
+    @media (max-width: 600px), (max-height: 500px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+  }
 
-      .login-form {
-        flex-direction: column;
-        align-items: flex-end;
-      }
+  .login-form {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 
-      /* ✅ Taille fixe des inputs et bouton sur mobile */
-      .login-form input,
-      .login-form button {
-        width: 140px;
-        text-align: center;
-      }
+  /* ✅ Taille fixe des inputs et bouton sur mobile */
+  .login-form input,
+  .login-form button {
+    width: 140px;
+    text-align: center;
+  }
 
-      /* ✅ Logo plus petit sur mobile, même en paysage */
-      .centered-logo {
-        height: 80px;
-        max-width: 70%;
-      }
-    }
+  /* ✅ Police plus petite dans les inputs sur mobile */
+  .login-form input {
+    font-size: 10px;
+  }
+
+  /* ✅ Logo plus petit sur mobile, même en paysage */
+  .centered-logo {
+    height: 80px;
+    max-width: 70%;
+  }
+}
+
   </style>
 </head>
 
