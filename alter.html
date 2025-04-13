@@ -35,10 +35,9 @@
       border-bottom: 1px solid #000;
       height: 70px;
       flex-shrink: 0;
-      z-index: 10;
       position: sticky;
       top: 0;
-      background: white;
+      z-index: 10;
     }
 
     .flags {
@@ -52,6 +51,12 @@
       border-radius: 4px;
       cursor: pointer;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      transition: filter 0.3s ease, opacity 0.3s ease;
+    }
+
+    .inactive-flag {
+      filter: grayscale(80%);
+      opacity: 0.7;
     }
 
     .login-form {
@@ -61,11 +66,11 @@
     }
 
     .login-form input {
-      padding: 6px; /* aussi un peu plus fin */
+      padding: 6px;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-family: "Tahoma", sans-serif;
-      font-size: 12px; /* ✅ plus petit (2 crans) */
+      font-size: 12px;
     }
 
     .login-form input::placeholder {
@@ -103,7 +108,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover; /* ✅ Rempli l'écran sans bandes noires */
+      object-fit: cover;
       object-position: center center;
       transform: translateY(0);
       transition: transform 0.1s ease-out;
@@ -167,9 +172,9 @@
   <div class="container">
     <div class="header">
       <div class="flags">
-        <img src="https://flagcdn.com/fr.svg" class="flag" onclick="changeLanguage('fr')" title="Français" />
-        <img src="https://flagcdn.com/gb.svg" class="flag" onclick="changeLanguage('en')" title="English" />
-        <img src="https://flagcdn.com/cn.svg" class="flag" onclick="changeLanguage('cn')" title="中文" />
+        <img src="https://flagcdn.com/fr.svg" class="flag" onclick="changeLanguage('fr')" id="flag-fr" title="Français" />
+        <img src="https://flagcdn.com/gb.svg" class="flag" onclick="changeLanguage('en')" id="flag-en" title="English" />
+        <img src="https://flagcdn.com/cn.svg" class="flag" onclick="changeLanguage('cn')" id="flag-cn" title="中文" />
       </div>
 
       <form id="loginForm" class="login-form">
@@ -210,6 +215,12 @@
     const userIdInput = document.getElementById("userId");
     const passwordInput = document.getElementById("password");
 
+    const flags = {
+      fr: document.getElementById('flag-fr'),
+      en: document.getElementById('flag-en'),
+      cn: document.getElementById('flag-cn')
+    };
+
     const messages = {
       fr: {
         login: "Se connecter",
@@ -240,6 +251,12 @@
       passwordInput.placeholder = messages[lang].placeholderPassword;
       errorMsg.textContent = messages[lang].error;
       errorMsg.style.display = "none";
+
+      // Update flag styles
+      for (const code in flags) {
+        flags[code].classList.add('inactive-flag');
+      }
+      flags[lang].classList.remove('inactive-flag');
     }
 
     form.addEventListener("submit", function (e) {
@@ -273,6 +290,7 @@
     window.addEventListener('load', function() {
       const logo = document.getElementById('centeredLogo');
       logo.classList.add('visible');
+      changeLanguage('fr'); // set default language to French on load
     });
   </script>
 </body>
