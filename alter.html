@@ -10,15 +10,20 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden; /* ❗ Empêche le scroll */
+      overflow: auto; /* ❗ Scroll autorisé */
+      scrollbar-width: none; /* ❗ Pour Firefox */
       font-family: "Georgia", serif;
       background-color: white;
+    }
+
+    body::-webkit-scrollbar {
+      display: none; /* ❗ Cache la barre sur Chrome/Safari/Edge */
     }
 
     .container {
       display: flex;
       flex-direction: column;
-      height: 100%;
+      min-height: 100vh;
     }
 
     .header {
@@ -31,6 +36,9 @@
       height: 70px;
       flex-shrink: 0;
       z-index: 10;
+      position: sticky;
+      top: 0;
+      background: white;
     }
 
     .flags {
@@ -94,11 +102,19 @@
       background-color: #222;
     }
 
+    .main-image-container {
+      height: 200vh; /* ❗ Image plus grande que l'écran pour permettre de scroller */
+      position: relative;
+      overflow: hidden;
+    }
+
     .main-image {
-      flex-grow: 1;
+      position: sticky;
+      top: 70px; /* ❗ Collé sous le bandeau */
       width: 100%;
-      object-fit: cover; /* ❗ Très important : remplit sans déformer */
-      object-position: center center; /* ❗ Centre l'image */
+      height: calc(100vh - 70px);
+      object-fit: cover;
+      object-position: center;
     }
 
     .error-message {
@@ -114,6 +130,7 @@
       padding: 8px 12px;
       border-radius: 4px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      z-index: 15;
     }
 
     /* Responsive pour mobile */
@@ -169,7 +186,9 @@
       </form>
     </div>
 
-    <img src="ChatGPTImage13.png" alt="Background" class="main-image" />
+    <div class="main-image-container">
+      <img src="ChatGPTImage13.png" alt="Background" class="main-image" />
+    </div>
   </div>
 
   <div class="error-message" id="errorMsg">
