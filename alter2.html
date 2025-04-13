@@ -78,22 +78,19 @@
     }
 
     .language-option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
+      padding: 6px;
       cursor: pointer;
-      font-size: 12px;
+    }
+
+    .language-option img {
+      width: 24px;
+      height: 16px;
+      border-radius: 4px;
+      display: block;
     }
 
     .language-option:hover {
       background-color: #f0f0f0;
-    }
-
-    .language-option img {
-      width: 20px;
-      height: 14px;
-      border-radius: 3px;
     }
 
     @keyframes fadeIn {
@@ -226,7 +223,7 @@
     <div class="header">
       <div class="language-selector" id="languageSelector">
         <div class="selected-flag" onclick="toggleLanguageList()">
-          <img id="currentFlag" src="https://flagcdn.com/fr.svg" alt="Current Language">
+          <img id="currentFlag" src="https://flagcdn.com/fr.svg" alt="Français">
           <span>▼</span>
         </div>
         <div class="language-list" id="languageList">
@@ -263,7 +260,7 @@
 
     const languages = {
       fr: { flag: "https://flagcdn.com/fr.svg", label: "Français", placeholders: ["Identifiant (6 chiffres)", "Mot de passe"], login: "Se connecter", error: "La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire." },
-      en: { flag: "A_digital_vector_graphic_of_a_flag_is_diagonally_s.png", label: "English", placeholders: ["ID (6 digits)", "Password"], login: "Log in", error: "The credentials provided did not permit identification. Please contact your manager." },
+      en: { flag: "UKUS_flag.png", label: "English", placeholders: ["ID (6 digits)", "Password"], login: "Log in", error: "The credentials provided did not permit identification. Please contact your manager." },
       cn: { flag: "https://flagcdn.com/cn.svg", label: "中文", placeholders: ["识别码 (6位数字)", "密码"], login: "登录", error: "所输入的信息未能完成验证。请联系您的客户经理。" },
       es: { flag: "https://flagcdn.com/es.svg", label: "Español", placeholders: ["ID (6 dígitos)", "Contraseña"], login: "Iniciar sesión", error: "La combinación ingresada no permitió su identificación. Por favor contacte a su gestor." },
       de: { flag: "https://flagcdn.com/de.svg", label: "Deutsch", placeholders: ["ID (6 Ziffern)", "Passwort"], login: "Anmelden", error: "Die eingegebenen Daten konnten nicht verifiziert werden. Bitte kontaktieren Sie Ihren Berater." },
@@ -279,6 +276,7 @@
 
     function changeLanguage(lang) {
       currentFlag.src = languages[lang].flag;
+      currentFlag.alt = languages[lang].label;
       userIdInput.placeholder = languages[lang].placeholders[0];
       passwordInput.placeholder = languages[lang].placeholders[1];
       loginButton.textContent = languages[lang].login;
@@ -286,11 +284,17 @@
       languageList.classList.remove('show');
     }
 
-    // Create language options
+    function closeLanguageListOnClickOutside(event) {
+      if (!event.target.closest('#languageSelector')) {
+        languageList.classList.remove('show');
+      }
+    }
+
+    // Créer la liste de langues
     for (const code in languages) {
       const option = document.createElement('div');
       option.className = 'language-option';
-      option.innerHTML = `<img src="${languages[code].flag}" alt="${languages[code].label}"><span>${languages[code].label}</span>`;
+      option.innerHTML = `<img src="${languages[code].flag}" title="${languages[code].label}" alt="${languages[code].label}">`;
       option.onclick = () => changeLanguage(code);
       languageList.appendChild(option);
     }
@@ -324,6 +328,8 @@
       logo.classList.add('visible');
       changeLanguage('fr');
     });
+
+    document.addEventListener('click', closeLanguageListOnClickOutside);
   </script>
 </body>
 </html>
