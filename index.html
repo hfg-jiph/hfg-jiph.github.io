@@ -2,53 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>HFG CAPITAL</title>
+  <title>HFG CAPITAL | Patrimonium Custodire, Augere et Tradere</title>
   <meta name="description" content="HFG CAPITAL" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-    body {
+    html, body {
       margin: 0;
-      background-color: white;
+      padding: 0;
+      height: 101vh;
+      overflow-x: hidden;
+      overflow-y: auto;
       font-family: "Georgia", serif;
+      background-color: white;
     }
 
-    .logo {
-      max-height: 90%;
-      max-width: 90%;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
-      z-index: 0;
+    body::-webkit-scrollbar {
+      display: none;
     }
 
-    .flag-container {
-      position: absolute;
-      top: 20px;
-      left: 20px;
+    .container {
       display: flex;
-      gap: 8px;
-      z-index: 2;
+      flex-direction: column;
+      min-height: 101vh;
     }
 
-    .flag {
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: white;
+      border-bottom: 1px solid #000;
+      height: 70px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .language-selector {
+      position: relative;
+    }
+
+    .selected-flag {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .selected-flag img {
       width: 24px;
       height: 16px;
       border-radius: 4px;
-      cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
 
-    .login-container {
+    .language-list {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 30px;
+      left: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      z-index: 20;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .language-list.show {
       display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1;
+      opacity: 1;
+    }
+
+    .language-option {
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    .language-option img {
+      width: 24px;
+      height: 16px;
+      border-radius: 4px;
+      display: block;
+      filter: grayscale(80%);
+      transition: filter 0.3s;
+    }
+
+    .language-option img:hover {
+      filter: grayscale(0%);
+    }
+
+    .language-option img.active-flag {
+      filter: grayscale(0%);
     }
 
     .login-form {
@@ -58,11 +109,11 @@
     }
 
     .login-form input {
-      padding: 8px;
+      padding: 6px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      font-family: "Georgia", serif;
-      font-size: 14px;
+      font-family: "Tahoma", sans-serif;
+      font-size: 12px;
     }
 
     .login-form input::placeholder {
@@ -88,137 +139,193 @@
       background-color: #222;
     }
 
-    .error-message {
-      position: absolute;
-      top: 70px;
-      right: 20px;
-      color: #b30000;
-      font-size: 12px;
-      display: none;
-      width: 320px;
-      font-family: "Georgia", serif;
+    .main-image-container {
+      position: relative;
+      height: 101vh;
+      overflow: hidden;
     }
 
-    .divider {
+    .main-image {
       position: absolute;
-      top: 120px;
+      top: 0;
       left: 0;
       width: 100%;
-      height: 1px;
-      background-color: black;
+      height: 100%;
+      object-fit: cover;
+      object-position: center bottom;
+      transform: translateY(0);
+      transition: transform 0.1s ease-out;
       z-index: 1;
     }
 
-    /* Responsive pour mobile */
+    .centered-logo {
+      position: fixed;
+      top: calc(50% + 35px);
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      height: 160px;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 2s ease-in, transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    .centered-logo.visible {
+      opacity: 1;
+    }
+
+    .centered-logo:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+      transition: transform 0.5s ease;
+    }
+
+    .error-message {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #b30000;
+      font-size: 12px;
+      display: none;
+      font-family: "Georgia", serif;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 8px 12px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      z-index: 15;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 10px;
+      color: #777;
+      margin: 20px 0;
+      font-family: "Tahoma", sans-serif; /* ✅ Police Tahoma */
+    }
+
+    /* Responsive Mobile Portrait */
+    @media (max-width: 600px) and (orientation: portrait) {
+      .header { flex-direction: column; height: auto; }
+      .login-form { flex-direction: column; align-items: center; }
+      .login-form input, .login-form button { width: 140px; text-align: center; }
+      .login-form input { font-size: 10px; }
+      .centered-logo { height: 80px; max-width: 70%; }
+    }
+
+    /* ✅ Fix language menu always left on mobile */
     @media (max-width: 600px) {
-      .login-container {
-        top: 60px;
-        right: 20px;
-        flex-direction: column;
-        align-items: flex-end;
+      .language-selector {
+        align-self: flex-start;
+        margin-bottom: 10px;
       }
-
-      .login-form {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 10px;
-      }
-
-      .error-message {
-        top: 200px;
-        right: 20px;
-        width: 90%;
-        max-width: 300px;
-      }
-
-      .divider {
-        top: 260px;
-      }
+    }
+    
+    /* Responsive Mobile Landscape */
+    @media (max-width: 600px) and (orientation: landscape) {
+      .header { flex-direction: column; height: auto; }
+      .login-form { flex-direction: row; justify-content: center; gap: 10px; flex-wrap: wrap; }
+      .login-form input, .login-form button { width: 140px; text-align: center; }
+      .login-form input { font-size: 10px; }
+      .centered-logo { height: 80px; max-width: 70%; }
     }
   </style>
 </head>
 
 <body>
-  <div class="flag-container">
-    <img src="https://flagcdn.com/fr.svg" class="flag" onclick="changeLanguage('fr')" title="Français" />
-    <img src="https://flagcdn.com/gb.svg" class="flag" onclick="changeLanguage('en')" title="English" />
-    <img src="https://flagcdn.com/cn.svg" class="flag" onclick="changeLanguage('cn')" title="中文" />
-  </div>
 
-  <div class="login-container">
-    <form id="loginForm" class="login-form">
-      <input
-        type="text"
-        id="userId"
-        maxlength="6"
-        pattern="\d{6}"
-        placeholder="Identifiant (6 chiffres)"
-        required
-      />
-      <input
-        type="password"
-        id="password"
-        maxlength="12"
-        placeholder="Mot de passe"
-        required
-      />
-      <button type="submit" id="loginButton">Se connecter</button>
-    </form>
+  <div class="container">
+    <div class="header">
+      <div class="language-selector" id="languageSelector">
+        <div class="selected-flag" onclick="toggleLanguageList()">
+          <img id="currentFlag" src="https://flagcdn.com/fr.svg" alt="Français">
+          <span>▼</span>
+        </div>
+        <div class="language-list" id="languageList"></div>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <input type="text" id="userId" maxlength="6" pattern="\d{6}" placeholder="Identifiant (6 chiffres)" required />
+        <input type="password" id="password" maxlength="12" placeholder="Mot de passe" required />
+        <button type="submit" id="loginButton">Se connecter</button>
+      </form>
+    </div>
+
+    <div class="main-image-container">
+      <img src="ChatGPTImage13.png" alt="Background" class="main-image" id="parallaxImage" />
+    </div>
+
+    <img src="logo.jpeg" alt="Logo Centré" class="centered-logo" id="centeredLogo" />
+
+    <footer>
+      © 2025 HFG Capital | Paris, France | <em>Patrimonium Custodire, Augere et Tradere</em>
+    </footer>
   </div>
 
   <div class="error-message" id="errorMsg">
     La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire.
   </div>
 
-  <div class="divider"></div>
-
-  <img class="logo" src="logo.jpeg" />
-
+  <!-- Scripts -->
   <script>
     const form = document.getElementById("loginForm");
     const errorMsg = document.getElementById("errorMsg");
     const loginButton = document.getElementById("loginButton");
     const userIdInput = document.getElementById("userId");
     const passwordInput = document.getElementById("password");
+    const currentFlag = document.getElementById("currentFlag");
+    const languageList = document.getElementById("languageList");
 
-    const messages = {
-      fr: {
-        login: "Se connecter",
-        placeholderUser: "Identifiant (6 chiffres)",
-        placeholderPassword: "Mot de passe",
-        error: "La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire."
-      },
-      en: {
-        login: "Log in",
-        placeholderUser: "ID (6 digits)",
-        placeholderPassword: "Password",
-        error: "The credentials provided did not permit identification. Please contact your manager."
-      },
-      cn: {
-        login: "登录",
-        placeholderUser: "识别码 (6位数字)",
-        placeholderPassword: "密码",
-        error: "所输入的信息未能完成验证。请联系您的客户经理。"
-      }
+    const languages = {
+      fr: { flag: "https://flagcdn.com/fr.svg", label: "Français", placeholders: ["Identifiant (6 chiffres)", "Mot de passe"], login: "Se connecter", error: "La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire." },
+      en: { flag: "UKUS_flag.png", label: "English", placeholders: ["ID (6 digits)", "Password"], login: "Log in", error: "The credentials provided did not permit identification. Please contact your manager." },
+      cn: { flag: "https://flagcdn.com/cn.svg", label: "中文", placeholders: ["识别码 (6位数字)", "密码"], login: "登录", error: "所输入的信息未能完成验证。请联系您的客户经理。" },
+      es: { flag: "https://flagcdn.com/es.svg", label: "Español", placeholders: ["ID (6 dígitos)", "Contraseña"], login: "Iniciar sesión", error: "La combinación ingresada no permitió su identificación. Por favor contacte a su gestor." },
+      de: { flag: "https://flagcdn.com/de.svg", label: "Deutsch", placeholders: ["ID (6 Ziffern)", "Passwort"], login: "Anmelden", error: "Die eingegebenen Daten konnten nicht verifiziert werden. Bitte kontaktieren Sie Ihren Berater." },
+      it: { flag: "https://flagcdn.com/it.svg", label: "Italiano", placeholders: ["ID (6 cifre)", "Password"], login: "Accedi", error: "La combinazione inserita non ha permesso l’identificazione. Si prega di contattare il proprio gestore." },
+      ru: { flag: "https://flagcdn.com/ru.svg", label: "Русский", placeholders: ["ID (6 цифр)", "Пароль"], login: "Войти", error: "Введенные данные не позволили выполнить идентификацию. Пожалуйста, свяжитесь с вашим менеджером." },
+      jp: { flag: "https://flagcdn.com/jp.svg", label: "日本語", placeholders: ["ID (6桁)", "パスワード"], login: "ログイン", error: "入力された情報では認証できませんでした。担当者にご連絡ください。" },
+      vn: { flag: "https://flagcdn.com/vn.svg", label: "Tiếng Việt", placeholders: ["ID (6 chữ số)", "Mật khẩu"], login: "Đăng nhập", error: "Thông tin đã nhập không cho phép xác thực. Vui lòng liên hệ với người quản lý của bạn." }
     };
 
-    let currentLanguage = "fr";
+    function toggleLanguageList() {
+      languageList.classList.toggle('show');
+    }
 
     function changeLanguage(lang) {
-      currentLanguage = lang;
-      loginButton.textContent = messages[lang].login;
-      userIdInput.placeholder = messages[lang].placeholderUser;
-      passwordInput.placeholder = messages[lang].placeholderPassword;
-      errorMsg.textContent = messages[lang].error;
-      errorMsg.style.display = "none"; // Cacher l'erreur au changement de langue
+      currentFlag.src = languages[lang].flag;
+      currentFlag.alt = languages[lang].label;
+      userIdInput.placeholder = languages[lang].placeholders[0];
+      passwordInput.placeholder = languages[lang].placeholders[1];
+      loginButton.textContent = languages[lang].login;
+      errorMsg.textContent = languages[lang].error;
+
+      const allFlags = document.querySelectorAll('.language-option img');
+      allFlags.forEach(img => img.classList.remove('active-flag'));
+      const selected = document.querySelector(`img[alt="${languages[lang].label}"]`);
+      if (selected) selected.classList.add('active-flag');
+
+      languageList.classList.remove('show');
+    }
+
+    function closeLanguageListOnClickOutside(event) {
+      if (!event.target.closest('#languageSelector')) {
+        languageList.classList.remove('show');
+      }
+    }
+
+    for (const code in languages) {
+      const option = document.createElement('div');
+      option.className = 'language-option';
+      option.innerHTML = `<img src="${languages[code].flag}" title="${languages[code].label}" alt="${languages[code].label}">`;
+      option.onclick = () => changeLanguage(code);
+      languageList.appendChild(option);
     }
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-
-      const userId = document.getElementById("userId").value;
-      const password = document.getElementById("password").value;
-
+      const userId = userIdInput.value;
+      const password = passwordInput.value;
       const idValid = /^\d{6}$/.test(userId);
       const pwdValid = password.length <= 12 && password.length > 0;
 
@@ -226,14 +333,42 @@
         alert("L'identifiant doit contenir exactement 6 chiffres.");
         return;
       }
-
       if (!pwdValid) {
         alert("Le mot de passe doit contenir jusqu'à 12 caractères maximum.");
         return;
       }
-
       errorMsg.style.display = "block";
     });
+
+    window.addEventListener('scroll', function() {
+      const scrolled = window.scrollY;
+      const parallax = document.getElementById('parallaxImage');
+      parallax.style.transform = 'translateY(' + scrolled * 0.2 + 'px)';
+    });
+
+    window.addEventListener('load', function() {
+      const logo = document.getElementById('centeredLogo');
+      logo.classList.add('visible');
+      changeLanguage('fr');
+      window.scrollTo(0, document.body.scrollHeight);
+      document.body.style.maxHeight = "101vh";
+      document.documentElement.style.maxHeight = "101vh";
+    });
+
+    document.addEventListener('click', closeLanguageListOnClickOutside);
+
+    // 🎯 Titre défilant
+    const baseTitle = "HFG CAPITAL | ";
+    const scrollText = "Patrimonium Custodire, Augere et Tradere    ";
+    let position = 0;
+    function scrollTitle() {
+      document.title = baseTitle + scrollText.substring(position) + scrollText.substring(0, position);
+      position++;
+      if (position > scrollText.length) position = 0;
+      setTimeout(scrollTitle, 300);
+    }
+    scrollTitle();
   </script>
+
 </body>
 </html>
