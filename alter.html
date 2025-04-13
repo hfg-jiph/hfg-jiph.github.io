@@ -11,13 +11,13 @@
       padding: 0;
       height: 100%;
       overflow: auto;
-      scrollbar-width: none; /* Firefox */
+      scrollbar-width: none;
       font-family: "Georgia", serif;
       background-color: white;
     }
 
     body::-webkit-scrollbar {
-      display: none; /* Chrome/Safari/Edge */
+      display: none;
     }
 
     .container {
@@ -52,17 +52,6 @@
       border-radius: 4px;
       cursor: pointer;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-
-    .logo-container {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-    }
-
-    .logo {
-      height: 40px;
-      object-fit: contain;
     }
 
     .login-form {
@@ -104,7 +93,7 @@
 
     .main-image-container {
       position: relative;
-      height: 200vh; /* Plus grand que l'écran pour pouvoir scroller */
+      height: 200vh; /* Hauteur pour permettre le scroll */
       overflow: hidden;
     }
 
@@ -118,6 +107,18 @@
       object-position: center;
       transform: translateY(0);
       transition: transform 0.1s ease-out;
+      z-index: 1;
+    }
+
+    .centered-logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      height: 80px;
+      object-fit: contain;
+      pointer-events: none; /* ❗ Ne bloque pas le clic */
     }
 
     .error-message {
@@ -144,13 +145,13 @@
         height: auto;
       }
 
-      .logo-container {
-        margin: 10px 0;
-      }
-
       .login-form {
         flex-direction: column;
         align-items: flex-end;
+      }
+
+      .centered-logo {
+        height: 60px; /* Un peu plus petit sur mobile */
       }
     }
   </style>
@@ -163,10 +164,6 @@
         <img src="https://flagcdn.com/fr.svg" class="flag" onclick="changeLanguage('fr')" title="Français" />
         <img src="https://flagcdn.com/gb.svg" class="flag" onclick="changeLanguage('en')" title="English" />
         <img src="https://flagcdn.com/cn.svg" class="flag" onclick="changeLanguage('cn')" title="中文" />
-      </div>
-
-      <div class="logo-container">
-        <img src="logo.jpeg" alt="Logo" class="logo" />
       </div>
 
       <form id="loginForm" class="login-form">
@@ -189,9 +186,14 @@
       </form>
     </div>
 
+    <!-- Image de fond -->
     <div class="main-image-container">
       <img src="ChatGPTImage13.png" alt="Background" class="main-image" id="parallaxImage" />
     </div>
+
+    <!-- Logo centré et fixe -->
+    <img src="logo.jpeg" alt="Logo Centré" class="centered-logo" />
+
   </div>
 
   <div class="error-message" id="errorMsg">
@@ -260,7 +262,7 @@
       errorMsg.style.display = "block";
     });
 
-    // --- Effet Parallax ---
+    // --- Effet Parallax sur l'image ---
     window.addEventListener('scroll', function() {
       const scrolled = window.scrollY;
       const parallax = document.getElementById('parallaxImage');
