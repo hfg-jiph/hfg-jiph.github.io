@@ -79,6 +79,9 @@
       font-family: "Georgia", serif;
       font-size: 14px;
       cursor: pointer;
+      min-width: 120px; /* Fixe la largeur minimale du bouton */
+      text-align: center;
+      white-space: nowrap;
     }
 
     .login-form button:hover {
@@ -148,18 +151,22 @@
     const form = document.getElementById("loginForm");
     const errorMsg = document.getElementById("errorMsg");
     const loginButton = document.getElementById("loginButton");
+    const userIdInput = document.getElementById("userId");
 
     const messages = {
       fr: {
         login: "Se connecter",
+        placeholder: "Identifiant (6 chiffres)",
         error: "La combinaison saisie n’a pas permis votre identification. Nous vous invitons à prendre contact avec votre gestionnaire."
       },
       en: {
         login: "Log in",
+        placeholder: "ID (6 digits)",
         error: "The credentials provided did not permit identification. Please contact your manager."
       },
       cn: {
         login: "登录",
+        placeholder: "识别码 (6位数字)",
         error: "所输入的信息未能完成验证。请联系您的客户经理。"
       }
     };
@@ -169,8 +176,9 @@
     function changeLanguage(lang) {
       currentLanguage = lang;
       loginButton.textContent = messages[lang].login;
+      userIdInput.placeholder = messages[lang].placeholder;
       errorMsg.textContent = messages[lang].error;
-      errorMsg.style.display = "none"; // Cacher l'erreur si on change la langue
+      errorMsg.style.display = "none"; // Cacher l'erreur quand on change de langue
     }
 
     form.addEventListener("submit", function (e) {
@@ -192,7 +200,7 @@
         return;
       }
 
-      // Toujours montrer l'erreur (car pas de compte réel)
+      // Toujours montrer l'erreur
       errorMsg.style.display = "block";
     });
   </script>
