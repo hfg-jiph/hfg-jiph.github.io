@@ -61,11 +61,11 @@
     }
 
     .login-form input {
-      padding: 8px;
+      padding: 6px; /* aussi un peu plus fin */
       border: 1px solid #ccc;
       border-radius: 4px;
-      font-family: "Tahoma", sans-serif; /* ✅ Police modifiée ici */
-      font-size: 14px;
+      font-family: "Tahoma", sans-serif;
+      font-size: 12px; /* ✅ plus petit (2 crans) */
     }
 
     .login-form input::placeholder {
@@ -103,12 +103,11 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain; /* ✅ Plus "cover" → maintenant "contain" */
-      object-position: center;
+      object-fit: cover; /* ✅ Rempli l'écran sans bandes noires */
+      object-position: center center;
       transform: translateY(0);
       transition: transform 0.1s ease-out;
       z-index: 1;
-      background-color: black; /* optionnel : couleur de fond si besoin autour de l'image */
     }
 
     .centered-logo {
@@ -193,12 +192,10 @@
       </form>
     </div>
 
-    <!-- Image de fond -->
     <div class="main-image-container">
       <img src="ChatGPTImage13.png" alt="Background" class="main-image" id="parallaxImage" />
     </div>
 
-    <!-- Logo centré et fixe -->
     <img src="logo.jpeg" alt="Logo Centré" class="centered-logo" id="centeredLogo" />
   </div>
 
@@ -207,7 +204,6 @@
   </div>
 
   <script>
-    // --- Gestion du changement de langue ---
     const form = document.getElementById("loginForm");
     const errorMsg = document.getElementById("errorMsg");
     const loginButton = document.getElementById("loginButton");
@@ -268,14 +264,12 @@
       errorMsg.style.display = "block";
     });
 
-    // --- Effet Parallax sur l'image ---
     window.addEventListener('scroll', function() {
       const scrolled = window.scrollY;
       const parallax = document.getElementById('parallaxImage');
       parallax.style.transform = 'translateY(' + scrolled * 0.4 + 'px)';
     });
 
-    // --- Effet Fade-in du logo ---
     window.addEventListener('load', function() {
       const logo = document.getElementById('centeredLogo');
       logo.classList.add('visible');
