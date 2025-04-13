@@ -93,7 +93,7 @@
 
     .main-image-container {
       position: relative;
-      height: 200vh; /* Hauteur pour permettre le scroll */
+      height: 200vh;
       overflow: hidden;
     }
 
@@ -116,9 +116,15 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 5;
-      height: 80px;
+      height: 160px; /* Grand logo sur PC */
       object-fit: contain;
-      pointer-events: none; /* ❗ Ne bloque pas le clic */
+      opacity: 0;
+      transition: opacity 2s ease-in; /* Fade-in doux */
+      pointer-events: none; /* Le logo ne bloque pas les clics */
+    }
+
+    .centered-logo.visible {
+      opacity: 1;
     }
 
     .error-message {
@@ -151,7 +157,7 @@
       }
 
       .centered-logo {
-        height: 60px; /* Un peu plus petit sur mobile */
+        height: 60px; /* Plus petit logo sur mobile */
       }
     }
   </style>
@@ -192,8 +198,7 @@
     </div>
 
     <!-- Logo centré et fixe -->
-    <img src="logo.jpeg" alt="Logo Centré" class="centered-logo" />
-
+    <img src="logo.jpeg" alt="Logo Centré" class="centered-logo" id="centeredLogo" />
   </div>
 
   <div class="error-message" id="errorMsg">
@@ -237,7 +242,7 @@
       userIdInput.placeholder = messages[lang].placeholderUser;
       passwordInput.placeholder = messages[lang].placeholderPassword;
       errorMsg.textContent = messages[lang].error;
-      errorMsg.style.display = "none"; // Cacher l'erreur au changement de langue
+      errorMsg.style.display = "none";
     }
 
     form.addEventListener("submit", function (e) {
@@ -267,6 +272,12 @@
       const scrolled = window.scrollY;
       const parallax = document.getElementById('parallaxImage');
       parallax.style.transform = 'translateY(' + scrolled * 0.4 + 'px)';
+    });
+
+    // --- Effet Fade-in du logo ---
+    window.addEventListener('load', function() {
+      const logo = document.getElementById('centeredLogo');
+      logo.classList.add('visible');
     });
   </script>
 </body>
