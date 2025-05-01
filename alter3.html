@@ -296,6 +296,7 @@
   <!-- Scripts -->
   <script>
     const form = document.getElementById("loginForm");
+    let activeLang = "fr"; // Langue par défaut
     const errorMsg = document.getElementById("errorMsg");
     const loginButton = document.getElementById("loginButton");
     const userIdInput = document.getElementById("userId");
@@ -321,6 +322,7 @@
 
     function changeLanguage(lang) {
       currentFlag.src = languages[lang].flag;
+      activeLang = lang;
       currentFlag.alt = languages[lang].label;
       userIdInput.placeholder = languages[lang].placeholders[0];
       passwordInput.placeholder = languages[lang].placeholders[1];
@@ -372,7 +374,7 @@ form.addEventListener("submit", function (e) {
   setTimeout(() => {
     loginButton.disabled = false;
     loginButton.classList.remove("loading-button");
-    loginButton.textContent = languages[currentFlag.alt]?.login || "Se connecter";
+    loginButton.textContent = languages[activeLang]?.login || "Se connecter";
     errorMsg.style.display = "block";
   }, 1500);
 });
