@@ -247,14 +247,23 @@
   bottom: 0;
   height: 2px;
   width: 0%;
-  background-color: white;
-  animation: loadBar 1.5s linear forwards;
+  background: linear-gradient(90deg, #d4af37, #f9d976);
+  animation: loadBar 1.5s linear forwards, shimmer 1s infinite linear;
+  border-radius: 1px;
+  opacity: 0.95;
 }
 
 @keyframes loadBar {
   0% { width: 0%; }
   100% { width: 100%; }
 }
+
+@keyframes shimmer {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.15); }
+  100% { filter: brightness(1); }
+}
+
 
   </style>
 </head>
