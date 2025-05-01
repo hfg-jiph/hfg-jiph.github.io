@@ -234,6 +234,19 @@
       .login-form input { font-size: 10px; }
       .centered-logo { height: 80px; max-width: 70%; }
     }
+
+    .loading-dots::after {
+  content: '.';
+  animation: dots 1s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0%   { content: '.'; }
+  33%  { content: '..'; }
+  66%  { content: '...'; }
+  100% { content: '.'; }
+}
+
   </style>
 </head>
 
@@ -327,23 +340,35 @@
       languageList.appendChild(option);
     }
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const userId = userIdInput.value;
-      const password = passwordInput.value;
-      const idValid = /^\d{6}$/.test(userId);
-      const pwdValid = password.length <= 12 && password.length > 0;
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const userId = userIdInput.value;
+  const password = passwordInput.value;
+  const idValid = /^\d{6}$/.test(userId);
+  const pwdValid = password.length <= 12 && password.length > 0;
 
-      if (!idValid) {
-        alert("L'identifiant doit contenir exactement 6 chiffres.");
-        return;
-      }
-      if (!pwdValid) {
-        alert("Le mot de passe doit contenir jusqu'à 12 caractères maximum.");
-        return;
-      }
-      errorMsg.style.display = "block";
-    });
+  if (!idValid) {
+    alert("L'identifiant doit contenir exactement 6 chiffres.");
+    return;
+  }
+  if (!pwdValid) {
+    alert("Le mot de passe doit contenir jusqu'à 12 caractères maximum.");
+    return;
+  }
+
+    // 🔄 Animation de chargement
+  loginButton.disabled = true;
+  loginButton.textContent = "Connexion";
+  loginButton.classList.add("loading-dots");
+
+  setTimeout(() => {
+    loginButton.disabled = false;
+    loginButton.classList.remove("loading-dots");
+    loginButton.textContent = languages[currentFlag.alt]?.login || "Se connecter";
+    errorMsg.style.display = "block";
+  }, 1500); // délai simulé de 1,5 secondes
+});
+
 
     window.addEventListener('scroll', function() {
       const scrolled = window.scrollY;
