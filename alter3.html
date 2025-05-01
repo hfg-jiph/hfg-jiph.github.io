@@ -235,16 +235,25 @@
       .centered-logo { height: 80px; max-width: 70%; }
     }
 
-    .loading-dots::after {
-  content: '.';
-  animation: dots 1s steps(3, end) infinite;
+.loading-button {
+  position: relative;
+  color: transparent !important;
 }
 
-@keyframes dots {
-  0%   { content: '.'; }
-  33%  { content: '..'; }
-  66%  { content: '...'; }
-  100% { content: '.'; }
+.loading-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background-color: white;
+  animation: loadBar 1.5s linear forwards;
+}
+
+@keyframes loadBar {
+  0% { width: 0%; }
+  100% { width: 100%; }
 }
 
   </style>
@@ -356,18 +365,18 @@ form.addEventListener("submit", function (e) {
     return;
   }
 
-    // 🔄 Animation de chargement
+  // Animation : barre de chargement dans le bouton
   loginButton.disabled = true;
-  loginButton.textContent = "Connexion";
-  loginButton.classList.add("loading-dots");
+  loginButton.classList.add("loading-button");
 
   setTimeout(() => {
     loginButton.disabled = false;
-    loginButton.classList.remove("loading-dots");
+    loginButton.classList.remove("loading-button");
     loginButton.textContent = languages[currentFlag.alt]?.login || "Se connecter";
     errorMsg.style.display = "block";
-  }, 1500); // délai simulé de 1,5 secondes
+  }, 1500);
 });
+
 
 
     window.addEventListener('scroll', function() {
